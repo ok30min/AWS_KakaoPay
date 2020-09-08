@@ -1,17 +1,21 @@
+// handler.js
+
 'use strict';
 
 const axios = require('axios'); // using 'axios' node module for HTTP request
 
-module.exports.payment = async () => { // meaning 'async' is 'asynchronous function'
+module.exports.payment = async ({ multiValueQueryStringParameters: params }) => {
+  // get parmas
+  const {
+    item_name,
+    quantity,
+    total_amount
+  } = params;
 
-  // set variables
-  const item_name = '초코파이';
-  const quantity = 1;
-  const total_amount = 2200;
-  const vat_amount = 200;
+  
+  // const vat_amount = 0;
   const tax_free_amount = 0;
-
-  const approval_url = 'http://example.com/success';
+  const approval_url = 'https://kapi.kakao.com/v1/payment/approve';
   const fail_url = 'http://example.com/fail';
   const cancel_url = 'http://example.com/cancel';
 
@@ -23,7 +27,7 @@ module.exports.payment = async () => { // meaning 'async' is 'asynchronous funct
     `item_name=${item_name}`,
     `quantity=${quantity}`,
     `total_amount=${total_amount}`,
-    `vat_amount=${vat_amount}`,
+    // `vat_amount=${vat_amount}`,
     `tax_free_amount=${tax_free_amount}`,
     `approval_url=${approval_url}`,
     `fail_url=${fail_url}`,
@@ -33,7 +37,7 @@ module.exports.payment = async () => { // meaning 'async' is 'asynchronous funct
   // send request (kakao payment)
   const req = await axios.post('https://kapi.kakao.com/v1/payment/ready', data, {
     headers: {
-      'Authorization': 'KakaoAK xxxxxxxxxx', // 'xxx...' = admin key
+      'Authorization': 'KakaoAK 9fb65a39436418537a3a4ad35dee3c1a', // 'xxx...' = admin key
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   });
